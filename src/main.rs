@@ -1,11 +1,15 @@
-// pub mod instruction;
+pub mod ast;
+pub mod instruction;
 pub mod lex;
-// pub mod parse;
+pub mod parse;
 // pub mod vm;
 
 use std::{env, fmt, fs::File, io::Read};
 
-use crate::lex::{Lex, Token};
+use crate::{
+    lex::{Lex, Token},
+    parse::Parser,
+};
 
 // use crate::vm::VM;
 
@@ -21,20 +25,17 @@ fn main() {
     file.read_to_string(&mut source).unwrap();
 
     // Create a lexer
-    let mut lex = Lex::new(&source);
-
+    let lex = Lex::new(&source);
+    let mut parser = Parser::new(lex);
     // Lex and print all tokens
-    loop {
-        let token = lex.next();
-        println!("{:?}", &token);
-        if token == Token::Eof {
-            break;
-        }
-        // match &token {
-        //     Token::Eof => break,
-        //     Token::Name(s) => println!("Name: {}", s),
-        //     Token::String(s) => println!("String: {}", s),
-        //     Token::Number(n) => println!("Number: {}", n),
-        // }
-    }
+    // loop {
+    //     let token = lex.next();
+    //     if token == Token::Eof {
+    //         break;
+    //     }
+    // }
+
+    dbg!(parser.parse().unwrap());
+    // dbg!(parser.constants);
+    // dbg!(parser.code);
 }
